@@ -13,7 +13,7 @@ This README contains:
 
 
 ## Outlines of the project
-Citizens and communities in Philippines and Indonesia are affected by floods
+Citizens and communities in Philippines and Indonesia are affected by floods
 each year. For 2014 alone, the Philippines Red Cross registered 21 floods in 80
 different areas in their country. Indonesia is comparably bad. To respond to the
 floods effectively, disaster managers need to know what is happening on-the-
