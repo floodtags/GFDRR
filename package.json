@@ -1,0 +1,14 @@
+{
+  "name": "GFDRR",
+  "version": "0.0.1",
+  "description": "This is an example enrichment that other members of the GFDRR project can use",
+  "main": "./enrichment.js",
+  "author": "Ron Boortman",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/floodtags/GFDRR"
+  },
+  "dependencies": {
+    "node-json-rpc": "0.0.1"
+  }
+}
