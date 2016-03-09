@@ -6,6 +6,9 @@ files:
 - package.json
 - enrichment.js
 - enrichment.py
+To be able to use this, the python part of the enrichment has to run as a
+background process before you can make calls via the enrichment. Make sure you
+start the python script with the correct port number as a parameter.
 
 ## .jshintrc
 This is a config file for the JShint linter for JavaScript. When developing in
