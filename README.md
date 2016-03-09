@@ -9,7 +9,7 @@ This README contains:
 1. Outlines of the project
 2. Available branches
 3. How to get started
-4. Code an naming conventions
+4. Code and naming conventions
 
 
 ## Outlines of the project
