@@ -17,8 +17,6 @@ var options = {
 
 var client = new rpc.Client(options);
 var version = JSON.parse(fs.readFileSync(__dirname + '/package.json', 'utf8')).version;
-// var allowedStreams = ['flood'];
-var allowedStreams = ['floods'];
 var toReplace = [/…/g, /([^\u0000-\u007F]|[\uE000-\uFFFF]|\uD83C[\uDF00-\uDFFF]|\uD83D[\uDC00-\uDDFF])/g];
 
 
@@ -29,10 +27,10 @@ var toReplace = [/…/g, /([^\u0000-\u007F]|[\uE000-\uFFFF]|\uD83C[\uDF00-\uDFFF
  *
  * This function is mandatory!
  */
-function ClassifierWrapper (tweet, id) {
-   if (!(this instanceof ClassifierWrapper)) { return new ClassifierWrapper(tweet, id); }
+function ClassifierWrapper (tweet, options) {
+   if (!(this instanceof ClassifierWrapper)) { return new ClassifierWrapper(tweet, options); }
    this._text = tweet.text;
-   this._stream = id;
+   this._options = options;
    this._classes = [];
 }
 
@@ -44,27 +42,22 @@ function ClassifierWrapper (tweet, id) {
  * This function is mandatory!
  */
 ClassifierWrapper.prototype.run = function () {
-   var self = this, begin = new Date();
+   var self = this;
    return new QPromise(function (resolve, reject) {
-      if (allowedStreams.indexOf(self._stream) >= 0) {
-         var text = self._text;
-         toReplace.forEach(function (patt) {
-            text = text.replace(patt, ' ');
-         });
-         client.call(
-            {jsonrpc: '2.0', method: 'classify', params: [text], id: 0},
-            function (err, response) {
-               if (err) reject(err);
-               else {
-                  self._classes.push(response.result);
-                  resolve(self);
-                  console.log((new Date()) - begin);
-               }
+      var text = self._text;
+      toReplace.forEach(function (patt) {
+         text = text.replace(patt, ' ');
+      });
+      client.call(
+         {jsonrpc: '2.0', method: 'classify', params: [text], id: 0},
+         function (err, response) {
+            if (err) reject(err);
+            else {
+               self._classes.push(response.result);
+               resolve(self);
             }
-         );
-      } else {
-         resolve(self);
-      }
+         }
+      );
    });
 };
 
@@ -83,12 +76,7 @@ ClassifierWrapper.prototype.classes = function () {
  * This function is mandatory!
  */
 ClassifierWrapper.prototype.enrichment = function () {
-   return {
-      keywords: this.classes(),
-      length: this.classes().length,
-      source: 'classifier',
-      version: version,
-   };
+   return this.classes();
 };
 
 ClassifierWrapper.type         = ClassifierWrapper.prototype.type         = 'classes';                                   // MANDATORY! The identifier of this enrichment
